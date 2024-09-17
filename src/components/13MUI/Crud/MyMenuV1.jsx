@@ -141,14 +141,6 @@ const MyMenu = () => {
           >
             {dropProfMenu()}
             {dropAluMenu()}
-            <Button
-              sx={{
-                color: "white",
-                my: 2,
-              }}
-            >
-              Sobre
-            </Button>
           </Box>
         </Toolbar>
       </Container>
