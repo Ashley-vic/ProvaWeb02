@@ -108,10 +108,10 @@ const Listar = () => {
               );
             })}
             {/*criando a linha adicional para printar a media*/}
-            <TableRow>
+            {/* <TableRow>
               <TableCell>media</TableCell>
               <TableCell>{somar(alunos)}</TableCell>
-            </TableRow>
+            </TableRow> */}
           </TableBody>
         </Table>
       </TableContainer>

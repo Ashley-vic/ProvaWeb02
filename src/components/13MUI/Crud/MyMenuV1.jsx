@@ -8,7 +8,7 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import AdbIcon from "@mui/icons-material/Adb";
+import { RiComputerLine } from "react-icons/ri";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -116,7 +116,7 @@ const MyMenu = () => {
     <AppBar position="static">
       <Container>
         <Toolbar>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+          <RiComputerLine sx={{ display: { xs: "none", md: "flex" }, mr: 3, fontSize: 30 }} />
           <Typography
             variant="h5"
             component="a"
@@ -129,7 +129,7 @@ const MyMenu = () => {
               fontWeight: 800,
             }}
           >
-            CRUD_V1
+            AP2_WEB 
           </Typography>
           <Box
             sx={{
