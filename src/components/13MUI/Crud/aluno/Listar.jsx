@@ -7,6 +7,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Button,
   Typography,
 } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
@@ -18,6 +19,7 @@ import axios from "axios";
 
 const Listar = () => {
   const [alunos, setAlunos] = useState([]);
+  const [isColored, setIsColored] = useState(false); // Estado para controlar a coloração
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -41,7 +43,8 @@ const Listar = () => {
       alert("Aluno " + id + " excluído com sucesso!");
     }
   }
-  //função que calcula a media dos alunos
+
+  // Função para calcular a média dos IRAs dos alunos
   function somar(alunos) {
     let resultado = 0;
     for (let i = 0; i < alunos.length; i++) {
@@ -52,11 +55,16 @@ const Listar = () => {
     return media;
   }
 
+  const handleColorToggle = () => {
+    setIsColored((prev) => !prev); // Alterna o estado para colorir ou descolorir as linhas
+  };
+
   return (
     <>
       <Typography variant="h5" fontWeight="bold">
         Listar Aluno
       </Typography>
+
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} arial-label="simple table">
           <TableHead>
@@ -65,26 +73,31 @@ const Listar = () => {
               <TableCell>NOME</TableCell>
               <TableCell>CURSO</TableCell>
               <TableCell>IRA</TableCell>
-              <TableCell>AÇOES</TableCell>
+              <TableCell>AÇÕES</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {alunos.map((aluno) => {
               let mediaTotal = somar(alunos);
+
               return (
-                <TableRow>
-                  {/* operador ternario para verificar se o aluno estava a abaixo da media e mudar de cor*/}
+                <TableRow
+                key={aluno._id}
+                // Verifica se a tabela está colorida e pinta as linhas conforme a condição
+                sx={
+                  isColored
+                    ? aluno.ira < mediaTotal
+                      ? { backgroundColor: "Tomato" }
+                      : { backgroundColor: "LightBlue" }
+                    : {}
+                }
+                >
                   <TableCell>{aluno._id}</TableCell>
-                  {aluno.ira < mediaTotal ? (
-                    <TableCell sx={{ background: "red" }}>
-                      {aluno.nome}
-                    </TableCell>
-                  ) : (
-                    <TableCell>{aluno.nome}</TableCell>
-                  )}
+                  <TableCell>{aluno.nome}</TableCell>
                   <TableCell>{aluno.curso}</TableCell>
                   <TableCell>{aluno.ira}</TableCell>
                   <TableCell>
+
                     <Box>
                       <IconButton
                         arial-label="edit"
@@ -103,15 +116,24 @@ const Listar = () => {
                         <DeleteIcon />
                       </IconButton>
                     </Box>
+
                   </TableCell>
                 </TableRow>
               );
             })}
-            {/*criando a linha adicional para printar a media*/}
-            {/* <TableRow>
-              <TableCell>media</TableCell>
+            
+            <TableRow sx={{ background: "RoyalBlue" }}>
+              <TableCell>Média:</TableCell>
               <TableCell>{somar(alunos)}</TableCell>
-            </TableRow> */}
+              <TableCell></TableCell>
+              <TableCell></TableCell>
+              <TableCell>
+                <Button variant="contained"  sx={{backgroundColor: "white",color: "black",
+                  "&:hover": {backgroundColor: "#f0f0f0",},}} onClick={handleColorToggle}>
+                  {isColored ? "Normal" : "Média"}
+                </Button>
+              </TableCell>
+            </TableRow>
           </TableBody>
         </Table>
       </TableContainer>
