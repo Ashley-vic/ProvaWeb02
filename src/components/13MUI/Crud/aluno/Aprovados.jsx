@@ -33,92 +33,83 @@ const Listar = () => {
     if (window.confirm("Deseja Excluir?")) {
       axios
         .delete(`http://localhost:3001/aluno/delete/${id}`)
-        .then((reponse) => {
-          const resultado = alunos.filter((aluno) => aluno._id != id);
+        .then((response) => {
+          const resultado = alunos.filter((aluno) => aluno._id !== id);
           setAlunos(resultado);
         })
         .catch((error) => console.log(error));
       alert("Aluno " + id + " excluído com sucesso!");
     }
   }
-  //função que calcula a media dos alunos
-  function somar(alunos) {
-    let resultado = 0;
-    for (let i = 0; i < alunos.length; i++) {
-      resultado += parseFloat(alunos[i].ira);
-    }
-    let tamanho = alunos.length;
-    let media = resultado / tamanho;
-    return media;
-  }
+
+  // Função para agrupar alunos por curso
+  const agruparAlunosPorCurso = (alunos) => {
+    return alunos.reduce((cursos, aluno) => {
+      const curso = aluno.curso;
+      if (!cursos[curso]) {
+        cursos[curso] = [];
+      }
+      cursos[curso].push(aluno);
+      return cursos;
+    }, {});
+  };
+
+  // Obter o agrupamento dos alunos por curso
+  const alunosPorCurso = agruparAlunosPorCurso(alunos);
 
   return (
     <>
       <Typography variant="h5" fontWeight="bold">
-        Listar Aluno
+        Listar Aluno por Curso
       </Typography>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} arial-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell>NOME</TableCell>
-              <TableCell>CURSO</TableCell>
-              <TableCell>IRA</TableCell>
-              <TableCell>AÇOES</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {alunos.map((aluno) => {
-              let mediaTotal = somar(alunos);
-              return (
-                <TableRow>
-                  {/* operador ternario para verificar se o aluno esta acima da media do ira, se estiver retorna
-                  o jsx da linha se nao, apenas da um console.log() que nao esta aprovado
-                  */}
+      {Object.keys(alunosPorCurso).map((curso) => (
+        <TableContainer component={Paper} key={curso} sx={{ marginBottom: 2 }}>
+          <Typography variant="h6" sx={{ margin: 2 }}>
+            {curso}
+          </Typography>
+          <Table sx={{ minWidth: 650 }} arial-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell>ID</TableCell>
+                <TableCell>NOME</TableCell>
+                <TableCell>CURSO</TableCell>
+                <TableCell>IRA</TableCell>
+                <TableCell>AÇÕES</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {alunosPorCurso[curso].map((aluno) => (
+                <TableRow key={aluno._id}>
+                  <TableCell>{aluno._id}</TableCell>
+                  <TableCell>{aluno.nome}</TableCell>
+                  <TableCell>{aluno.curso}</TableCell>
+                  <TableCell>{aluno.ira}</TableCell>
+                  <TableCell>
+                    <Box>
+                      <IconButton
+                        arial-label="edit"
+                        color="primary"
+                        component={Link}
+                        to={`/editarAluno/${aluno._id}`}
+                      >
+                        <EditIcon />
+                      </IconButton>
 
-                  {aluno.ira > mediaTotal ? (
-                    <>
-                      <TableCell>{aluno._id}</TableCell>
-                      <TableCell>{aluno.nome}</TableCell>
-                      <TableCell>{aluno.curso}</TableCell>
-                      <TableCell>{aluno.ira}</TableCell>
-                      <TableCell>
-                        <Box>
-                          <IconButton
-                            arial-label="edit"
-                            color="primary"
-                            component={Link}
-                            to={`/editarAluno/${aluno._id}`}
-                          >
-                            <EditIcon />
-                          </IconButton>
-
-                          <IconButton
-                            arial-label="delete"
-                            color="error"
-                            onClick={() => deleteAlunoById(aluno._id)}
-                          >
-                            <DeleteIcon />
-                          </IconButton>
-                        </Box>
-                      </TableCell>
-                    </>
-                  ) : (
-                    //<TableCell>{aluno.nome}</TableCell>
-                    console.log("reprovado")
-                  )}
+                      <IconButton
+                        arial-label="delete"
+                        color="error"
+                        onClick={() => deleteAlunoById(aluno._id)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </Box>
+                  </TableCell>
                 </TableRow>
-              );
-            })}
-            {/*criando a linha adicional para printar a media*/}
-            <TableRow>
-              <TableCell>media</TableCell>
-              <TableCell>{somar(alunos)}</TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </TableContainer>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      ))}
     </>
   );
 };
