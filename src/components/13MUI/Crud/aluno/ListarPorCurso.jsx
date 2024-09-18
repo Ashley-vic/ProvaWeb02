@@ -16,9 +16,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const Listar = () => {
+const ListarPorCurso = () => {
   const [alunos, setAlunos] = useState([]);
-  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -114,4 +113,4 @@ const Listar = () => {
   );
 };
 
-export default Listar;
+export default ListarPorCurso;

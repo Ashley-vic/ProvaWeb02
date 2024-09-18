@@ -20,7 +20,6 @@ import axios from "axios";
 const Listar = () => {
   const [alunos, setAlunos] = useState([]);
   const [isColored, setIsColored] = useState(false); // Estado para controlar a coloração
-  const navigate = useNavigate();
 
   useEffect(() => {
     axios
