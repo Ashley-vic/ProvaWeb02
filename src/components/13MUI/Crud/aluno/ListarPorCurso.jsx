@@ -12,7 +12,7 @@ import {
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -78,7 +78,12 @@ const ListarPorCurso = () => {
             </TableHead>
             <TableBody>
               {alunosPorCurso[curso].map((aluno) => (
-                <TableRow key={aluno._id}>
+                <TableRow
+                  key={aluno._id}
+                  sx={{
+                    backgroundColor: aluno.ira >= 7 ? "lightgreen" : "inherit",
+                  }}
+                >
                   <TableCell>{aluno._id}</TableCell>
                   <TableCell>{aluno.nome}</TableCell>
                   <TableCell>{aluno.curso}</TableCell>
